@@ -1,14 +1,9 @@
-(ns  calculator.web
+(ns calculator.web
   (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.json :refer [wrap-json-response]]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
-
-(defn splash []
-  {:status 500
-   :headers {"Content-Type" "text/plain"}
-   :body "Error!!~~"})
 
 (defroutes handler
            (GET "/calculus" [query]
