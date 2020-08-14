@@ -25,7 +25,7 @@ represented as keywords.
         item-1 (last (butlast coll))
         item-2 (last coll)
         item-3 input]
-    (if-let [operator (first (filter #((:use?-fn %) item-1 item-2 item-3) operators))]
+    (if-let [operator (first (filter #((:applicable? %) item-1 item-2 item-3) operators))]
       ((:reducer operator) item-1 item-2 item-3 coll)
       (concat coll [input]))))
 
