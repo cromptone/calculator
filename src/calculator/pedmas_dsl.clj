@@ -17,7 +17,7 @@ represented as keywords.
 (def addition (num-op-num->num :add +))
 (def subtraction (num-op-num->num :subt -))
 (def division (num-op-num->num :div /))
-(def multiplication (num-op-num->num :div *))
+(def multiplication (num-op-num->num :mult *))
 
 ;TODO make sure to use vec for appending
 (defn reduce-by-threes [operators result input]
