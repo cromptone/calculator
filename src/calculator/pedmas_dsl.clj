@@ -11,8 +11,8 @@ represented as keywords.
                   (boolean (and (number? item-1)
                                 (= kw item-2)
                                 (number? item-3))))
-   :reducer (fn [item-1 item-2 item-3 coll]
-              (concat (drop-last 2 coll) [(f item-1 item-3)]))})
+   :apply (fn [item-1 item-2 item-3 coll]
+            (concat (drop-last 2 coll) [(f item-1 item-3)]))})
 
 (def addition (num-op-num->num :add +))
 (def subtraction (num-op-num->num :subt -))
@@ -26,7 +26,7 @@ represented as keywords.
         item-2 (last coll)
         item-3 input]
     (if-let [operator (first (filter #((:applicable? %) item-1 item-2 item-3) operators))]
-      ((:reducer operator) item-1 item-2 item-3 coll)
+      ((:apply operator) item-1 item-2 item-3 coll)
       (concat coll [input]))))
 
 (defn reduce' [f coll]
