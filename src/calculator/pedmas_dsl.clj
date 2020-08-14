@@ -29,7 +29,15 @@ represented as keywords.
       ((:reducer operator) item-1 item-2 item-3 coll)
       (concat coll [input]))))
 
+(defn reduce' [f coll]
+  "When a coll has a single item, clojure.core/reduce short-circuits and returns
+   the item. For our threaded implemenation, we want the collection returned"
+  (if (-> coll count (= 1))
+    coll
+    (reduce f coll)))
+
 (defn reduce-unnested [subproblem]
   (->> subproblem
-       (reduce (partial reduce-by-threes [multiplication division]))
-       (reduce (partial reduce-by-threes [addition subtraction]))))
+       (reduce' (partial reduce-by-threes [multiplication division]))
+       (reduce' (partial reduce-by-threes [addition subtraction]))
+       first))
