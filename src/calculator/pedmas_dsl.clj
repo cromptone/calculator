@@ -19,16 +19,15 @@ represented as keywords.
 (def division (num-op-num->num :div /))
 (def multiplication (num-op-num->num :div *))
 
-; My goal here is to produce a reducer that goes over previous 3 in collection
 ;TODO make sure to use vec for appending
-(defn reduce-by-threes [operator result input]
+(defn reduce-by-threes [operators result input]
   (let [coll (if (seq? result) result (vector result))
         item-1 (last (butlast coll))
         item-2 (last coll)
         item-3 input]
-    (if ((:applicable? operator) item-1 item-2 item-3)
+    (if-let [operator (first (filter #((:use?-fn %) item-1 item-2 item-3) operators))]
       ((:reducer operator) item-1 item-2 item-3 coll)
       (concat coll [input]))))
 
 (defn reduce-unnested [subproblem]
-  (reduce (partial reduce-by-threes addition) subproblem))
+  (reduce (partial reduce-by-threes [addition] subproblem)))
