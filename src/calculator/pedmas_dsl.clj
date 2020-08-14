@@ -16,6 +16,8 @@ represented as keywords.
 
 (def addition (num-op-num->num :add +))
 (def subtraction (num-op-num->num :subt -))
+(def division (num-op-num->num :div /))
+(def multiplication (num-op-num->num :div *))
 
 ; My goal here is to produce a reducer that goes over previous 3 in collection
 ;TODO make sure to use vec for appending
