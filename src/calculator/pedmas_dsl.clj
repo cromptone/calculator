@@ -15,6 +15,7 @@ represented as keywords.
               (concat (drop-last 2 coll) [(f item-1 item-3)]))})
 
 (def addition (num-op-num->num :add +))
+(def subtraction (num-op-num->num :subt -))
 
 ; My goal here is to produce a reducer that goes over previous 3 in collection
 ;TODO make sure to use vec for appending
