@@ -30,4 +30,6 @@ represented as keywords.
       (concat coll [input]))))
 
 (defn reduce-unnested [subproblem]
-  (reduce (partial reduce-by-threes [addition] subproblem)))
+  (->> subproblem
+       (reduce (partial reduce-by-threes [multiplication division]))
+       (reduce (partial reduce-by-threes [addition subtraction]))))
