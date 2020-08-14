@@ -1,4 +1,6 @@
-(ns calculator.pedmas-dsl)
+(ns calculator.pedmas-dsl
+  (:require [clojure.walk :refer [postwalk]]))
+
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
 problem, parses the solution. The nesting of the data structures themselves represent
@@ -41,3 +43,11 @@ represented as keywords.
        (reduce' (partial reduce-by-threes [multiplication division]))
        (reduce' (partial reduce-by-threes [addition subtraction]))
        first))
+
+(defn evaluate [node]
+  (if (coll? node)
+    (reduce-unnested node)
+    node))
+
+(defn reduce-nested [problem]
+  (postwalk evaluate problem))
