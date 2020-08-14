@@ -5,7 +5,8 @@
             [compojure.route :as route]
             [clojure.edn :as edn]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [calculator.utils :as utils]))
+            [calculator.utils :as utils]
+            [calculator.pedmas-dsl :refer [reduce-nested]]))
 
 (def ops {"/" :div
           "*" :mult
@@ -27,7 +28,7 @@
            (GET "/calculus" [query]
                 {:status 200
                  :headers {"Content-Type" "text/plain"}
-                 :body {:result (clean-query query)
+                 :body {:result (-> query clean-query reduce-nested)
                         :error false}})
            (ANY "*" [] {:status 500
                         :headers {"Content-Type" "text/plain"}
