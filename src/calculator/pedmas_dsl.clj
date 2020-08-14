@@ -1,12 +1,19 @@
 (ns calculator.pedmas-dsl
   (:require [clojure.walk :refer [postwalk]]))
-
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
 problem, parses the solution. The nesting of the data structures themselves represent
 the the parenthesis. Supported operations (addition, multiplication, etc) are
 represented as keywords.
 "
+
+(def negation
+  {:applicable? (fn [item-1 item-2 item-3]
+                  (boolean (and (not (number? item-1))
+                                (= :subt item-2)
+                                (number? item-3))))
+   :apply (fn [item-1 item-2 item-3 coll]
+            (concat (drop-last coll) [(* -1 item-3)]))})
 
 (defn num-op-num->num [kw f]
   {:applicable? (fn [item-1 item-2 item-3]
@@ -40,6 +47,7 @@ represented as keywords.
 
 (defn reduce-unnested [subproblem]
   (->> subproblem
+       (reduce' (partial reduce-by-threes [negation]))
        (reduce' (partial reduce-by-threes [multiplication division]))
        (reduce' (partial reduce-by-threes [addition subtraction]))
        first))
