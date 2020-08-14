@@ -6,12 +6,15 @@ the the parenthesis. Supported operations (addition, multiplication, etc) are
 represented as keywords.
 "
 
-(def addition {:applicable? (fn [item-1 item-2 item-3]
-                              (boolean (and (number? item-1)
-                                            (= :add item-2)
-                                            (number? item-3))))
-               :reducer (fn [item-1 item-2 item-3 coll]
-                          (concat (drop-last 2 coll) [(+ item-1 item-3)]))})
+(defn num-op-num->num [kw f]
+  {:applicable? (fn [item-1 item-2 item-3]
+                  (boolean (and (number? item-1)
+                                (= kw item-2)
+                                (number? item-3))))
+   :reducer (fn [item-1 item-2 item-3 coll]
+              (concat (drop-last 2 coll) [(f item-1 item-3)]))})
+
+(def addition (num-op-num->num :add +))
 
 ; My goal here is to produce a reducer that goes over previous 3 in collection
 ;TODO make sure to use vec for appending
