@@ -9,7 +9,7 @@ subtraction, and negation) are represented as keywords.
 
 Note that :subt represents negation and subtraction. Exponents not implemented.
 
-Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
+Sample input: [:subt 2 :mult 1.003 [3 :div 4 :subt 20.2] add 0 :subt :subt 2)]
 "
 
 (defn precision [f]
