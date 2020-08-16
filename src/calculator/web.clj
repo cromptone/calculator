@@ -1,5 +1,5 @@
 (ns calculator.web
-  (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
+  (:require [compojure.core :refer [defroutes GET ANY]]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.json :refer [wrap-json-response]]
             [compojure.route :as route]
@@ -7,7 +7,8 @@
             [environ.core :refer [env]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [calculator.utils :as utils]
-            [calculator.pedmas-dsl :refer [reduce-nested]])
+            [calculator.pedmas-dsl :refer [reduce-nested]]
+            [calculator.exceptions :refer [error-500 check-decoded-query]])
   (:gen-class))
 
 (def ops {"/" :div
@@ -19,6 +20,7 @@
   "TODO: error handling"
   (-> encoded-query
       (utils/decode-64)
+      (check-decoded-query)
       (#(str "[" % "]"))
       (clojure.string/replace #"[*/+-]" #(str " " (get ops %) " "))
       (clojure.string/replace #"\(|\)" {"(" "[" ")" "]"})
@@ -27,10 +29,12 @@
 
 (defroutes handler
            (GET "/calculus" [query]
-                {:status 200
-                 :headers {"Content-Type" "application/json"}
-                 :body {:result (-> query clean-query reduce-nested)
-                        :error false}})
+                (try
+                  {:status 200
+                   :headers {"Content-Type" "application/json"}
+                   :body {:result (-> query clean-query reduce-nested)
+                          :error false}}
+                  (catch Exception e (error-500 e))))
            (ANY "*" [] {:status 400
                         :headers {"Content-Type" "application/json"}
                         :body {:message "Invalid query format"

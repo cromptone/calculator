@@ -1,5 +1,6 @@
 (ns calculator.pedmas-dsl
-  (:require [clojure.walk :refer [postwalk]]))
+  (:require [clojure.walk :refer [postwalk]]
+            [calculator.exceptions :refer [check-reduced-problem]]))
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
 problem, parses the solution. The nesting of the data structures themselves
@@ -57,7 +58,8 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
          (reduce' (partial reduce-by-threes [negation]))
          (reduce' (partial reduce-by-threes [multiplication division]))
          (reduce' (partial reduce-by-threes [addition subtraction]))
-         first))) ; TODO: throw error if not reduced to single-item coll
+         (check-reduced-problem)
+         first)))
 
 (defn evaluate [node]
   (if (coll? node)
