@@ -8,7 +8,7 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [calculator.utils :as utils]
             [calculator.pedmas-dsl :refer [reduce-nested]]
-            [calculator.exceptions :refer [error-500 check-decoded-query]])
+            [calculator.exceptions :refer [error check-decoded-query]])
   (:gen-class))
 
 (def ops {"/" :div
@@ -33,11 +33,8 @@
                    :headers {"Content-Type" "application/json"}
                    :body {:result (-> query clean-query reduce-nested)
                           :error false}}
-                  (catch Exception e (error-500 e))))
-           (ANY "*" [] {:status 400
-                        :headers {"Content-Type" "application/json"}
-                        :body {:message "Invalid query format. Check endpoint format"
-                               :error true}}))
+                  (catch Exception e (error 500 (.getMessage e)))))
+           (ANY "*" [] (error 400 "Invalid endpoint format")))
 
 (def app
   (-> handler wrap-json-response (wrap-defaults site-defaults)))

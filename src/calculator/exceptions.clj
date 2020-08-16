@@ -1,13 +1,12 @@
 (ns calculator.exceptions)
 
-(defn ex [explanation]
-  (throw (Exception. explanation)))
-
-(defn error-500 [e]
-  {:status 500
+(defn error [status msg]
+  {:status status
    :headers {"Content-Type" "application/json"}
-   :body {:message (.getMessage e)
+   :body {:message msg
           :error true}})
+
+(defn ex [explanation] (throw (Exception. explanation)))
 
 (defn check-decoded-query [query]
   (let [invalid-chars (clojure.string/replace query #"[0-9\s\*\+\-\/\(\)\.]" "")
