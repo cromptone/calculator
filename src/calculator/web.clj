@@ -37,7 +37,7 @@
                   (catch Exception e (error-500 e))))
            (ANY "*" [] {:status 400
                         :headers {"Content-Type" "application/json"}
-                        :body {:message "Invalid query format"
+                        :body {:message "Invalid query format. Check endpoint format"
                                :error true}}))
 
 (def app
