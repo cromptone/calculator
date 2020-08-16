@@ -25,8 +25,6 @@
    {:equation "-       2 + 3 --4 *  8 -(4)  " :result 29 :testing-str "with odd whitespace"}
    {:equation "-3" :result -3 :testing-str "with single negative number"}
    {:equation "1" :result 1 :testing-str "with single number"}
-   {:equation "[2 +(3 +[4 *[7+8]+[9+1.1]*4])*4 /3 ]" :result 139.86666667 :testing-str "with [] and ()"}
-   {:equation "[3 + [2 + (1 +3)+3]]" :result 12 :testing-str "with [] and ()"}
    {:equation "(((1 + 2 - (2 + 3))))" :result -2 :testing-str "with multiple outer parens"}])
 
 (def sample-bad-data
@@ -35,7 +33,6 @@
    {:equation "- (-2 * -2)* a 10 / 2 " :testing-str "with invalid letter"}
    {:equation "- (-2 * -2)* 10 / 2 3" :testing-str "with missing operator"}
    {:equation "" :testing-str "with blank query"}
-   {:equation "- (-2 * -2)* [10/2]+[3" :testing-str "with invalid brackets"}
    {:equation "- (-2 * -2)+ (* 10 / 2 3" :testing-str "with invalid parens"}])
 
 (defn GET-test [{:keys [equation result testing-str]}]

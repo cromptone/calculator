@@ -10,12 +10,11 @@
           :error true}})
 
 (defn check-decoded-query [query]
-  (let [invalid-chars (clojure.string/replace query #"[0-9\s\*\+\-\/\(\)\[\]\.]" "")
+  (let [invalid-chars (clojure.string/replace query #"[0-9\s\*\+\-\/\(\)\.]" "")
         freq (frequencies query)]
     (cond
       (clojure.string/blank? query) (ex "Query value is blank")
       (not-empty invalid-chars) (ex (str "Invalid characters in decoded query: " invalid-chars))
-      (not= (get freq \[) (get freq \])) (ex "Bracket characters don't match in decoded query")
       (not= (get freq \() (get freq \))) (ex "Parenthesis characters don't match in decoded query")
       :else query)))
 
