@@ -4,7 +4,7 @@
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
 problem, parses the solution. The nesting of the data structures themselves
-represent parenthesis. Supported operations (addition, multiplication, division,
+represent parentheses. Supported operations (addition, multiplication, division,
 subtraction, and negation) are represented as keywords.
 
 Note that :subt represents negation and subtraction. Exponents not implemented.
