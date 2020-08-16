@@ -35,7 +35,6 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
                :apply (fn [_ _ item-3 coll]
                         (concat (drop-last coll) [(* -1 item-3)]))})
 
-;TODO make sure to use vec for appending
 (defn reduce-by-threes [operators result input]
   (let [coll (if (seq? result) result (vector result))
         item-1 (last (butlast coll))

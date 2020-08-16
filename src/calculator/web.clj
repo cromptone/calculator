@@ -17,7 +17,6 @@
           "-" :subt})
 
 (defn clean-query [encoded-query]
-  "TODO: error handling"
   (-> encoded-query
       (utils/decode-64)
       (check-decoded-query)
