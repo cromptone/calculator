@@ -31,8 +31,8 @@
                  :headers {"Content-Type" "application/json"}
                  :body {:result (-> query clean-query reduce-nested)
                         :error false}})
-           (ANY "*" [] {:status 500
-                        :headers {"Content-Type" "text/plain"}
+           (ANY "*" [] {:status 400
+                        :headers {"Content-Type" "application/json"}
                         :body {:message "Invalid query format"
                                :error true}}))
 
