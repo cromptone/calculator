@@ -49,3 +49,10 @@
         (is (= (:status response) 200))
         (is (= content-type "application/json"))
         (is (approx= (:result body) -92))))
+    (testing "with bad queries"
+      (let [response (app (mock/request :get  "/bad?query=KDQgKyA0IC0gMjAwIC8gMik="))
+            body (-> response :body parse-json)
+            content-type (get (:headers response) "Content-Type")]
+        (is (= (:status response) 400))
+        (is (= content-type "application/json"))
+        (is (= (:error body) true))))))
