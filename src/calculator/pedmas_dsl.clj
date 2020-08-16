@@ -11,6 +11,7 @@ Note that :subt represents both negation and subtraction.
 
 Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
 "
+
 (defn precision [f]
   #(with-precision 100 (apply f %&)))
 
