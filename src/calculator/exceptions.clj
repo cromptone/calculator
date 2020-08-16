@@ -14,12 +14,12 @@
         freq (frequencies query)]
     (cond
       (not-empty invalid-chars) (ex (str "Invalid characters in decoded query: " invalid-chars))
-      (not= (get freq \[) (get freq \])) (ex (str "Brackets characters don't match in decoded query"))
-      (not= (get freq \() (get freq \()) (ex (str "Parentheses don't match in decoded query"))
+      (not= (get freq \[) (get freq \])) (ex "Brackets characters don't match in decoded query")
+      (not= (get freq \() (get freq \()) (ex "Parentheses don't match in decoded query")
       :else query)))
 
-(defn check-reduced-problem [coll] coll)
-  ; (if (or (not= 1 (count coll))
-  ;         (-> coll first number?))
-  ;   (ex (str "Equation did not reduce properly. Operators, numbers, or parens might be in an invalid order"))
-  ;   coll))
+(defn check-reduced-problem [coll]
+  (if (and (= 1 (count coll))
+           (number? (first coll)))
+    coll
+    (ex "Equation did not reduce properly. Operators, numbers, or parens might be in an invalid order")))
