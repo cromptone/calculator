@@ -22,4 +22,5 @@
   (if (and (= 1 (count coll))
            (number? (first coll)))
     coll
-    (ex "Equation did not reduce properly. Operators, numbers, or parens might be in an invalid order")))
+    (ex (str "Equation did not reduce properly. "
+             "Operators, numbers, or parens might be in an invalid order"))))
