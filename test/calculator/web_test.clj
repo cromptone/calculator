@@ -34,6 +34,7 @@
    {:equation "- (-2 * -2)* * 10 / 2 " :testing-str "with bad syntax"}
    {:equation "- (-2 * -2)* a 10 / 2 " :testing-str "with invalid letter"}
    {:equation "- (-2 * -2)* 10 / 2 3" :testing-str "with missing operator"}
+   {:equation "" :testing-str "with blank query"}
    {:equation "- (-2 * -2)* [10/2]+[3" :testing-str "with invalid brackets"}
    {:equation "- (-2 * -2)+ (* 10 / 2 3" :testing-str "with invalid parens"}])
 
@@ -54,7 +55,6 @@
           response (app (mock/request :get  endpoint))
           body (-> response :body parse-json)
           content-type (get (:headers response) "Content-Type")]
-      (prn (:message body))
       (is (= (:status response) 500))
       (is (true? (:error body)))
       (is (= content-type "application/json")))))
