@@ -22,7 +22,7 @@
       (#(str "[" % "]"))
       (clojure.string/replace #"[*/+-]" #(str " " (get ops %) " "))
       (clojure.string/replace #"\(|\)" {"(" "[" ")" "]"})
-      (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. 1.5 with 0.5
+      (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. .5 with 0.5
       edn/read-string))
 
 (defroutes handler
