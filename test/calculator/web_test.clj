@@ -40,9 +40,12 @@
       (is (approx= (:result body) result)))))
 
 (deftest equations-test
-  (let [response (app (mock/request :get  "/calculus?query=KDQgKyA0IC0gMjAwIC8gMik="))
-        body (-> response :body parse-json)
-        content-type (get (:headers response) "Content-Type")]
-    (is (= (:status response) 200))
-    (is (= content-type "application/json"))
-    (is (= (:result body) -92))))
+  (testing "GET request works"
+    (apply #(testing %&) (map GET-test sample-query-data))
+    (testing "with hard-coded queries"
+      (let [response (app (mock/request :get  "/calculus?query=KDQgKyA0IC0gMjAwIC8gMik="))
+            body (-> response :body parse-json)
+            content-type (get (:headers response) "Content-Type")]
+        (is (= (:status response) 200))
+        (is (= content-type "application/json"))
+        (is (approx= (:result body) -92))))
