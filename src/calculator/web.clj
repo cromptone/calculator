@@ -7,7 +7,8 @@
             [environ.core :refer [env]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [calculator.utils :as utils]
-            [calculator.pedmas-dsl :refer [reduce-nested]]))
+            [calculator.pedmas-dsl :refer [reduce-nested]])
+  (:gen-class))
 
 (def ops {"/" :div
           "*" :mult
