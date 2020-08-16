@@ -23,8 +23,6 @@
       (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. 1.5 with 0.5
       edn/read-string))
 
-(defn go [] (clean-query "MiAqICgyMy8oMyozKSktIDIzICogKDIqMyk"))
-
 (defroutes handler
            (GET "/calculus" [query]
                 {:status 200
