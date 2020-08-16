@@ -5,6 +5,13 @@
             [ring.mock.request :as mock]
             [calculator.utils :refer [encode-64 decode-64]]
             [clojure.math.numeric-tower :as math]))
+
+(defn approx= [a b]
+  (let [epsilon 0.000001]
+    (> epsilon (math/abs (- a b)) (* -1 epsilon))))
+
+(defn parse-json [body]
+  (cheshire/parse-string body true))
 (defn GET-test [{:keys [equation result testing-str]}]
   (testing testing-str
     (let [endpoint (str "/calculus?query=" (encode-64 equation))
