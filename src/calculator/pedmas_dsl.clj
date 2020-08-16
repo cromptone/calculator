@@ -65,4 +65,6 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
     node))
 
 (defn reduce-nested [problem]
-  (postwalk evaluate problem))
+  (try
+    (postwalk evaluate problem)
+    (catch Exception e (str "caught exception: " (.getMessage e)))))
