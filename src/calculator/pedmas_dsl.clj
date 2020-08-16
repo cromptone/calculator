@@ -2,10 +2,9 @@
   (:require [clojure.walk :refer [postwalk]]))
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
-problem, parses the solution. The nesting of the data structures themselves represent
-the the parenthesis. Supported operations (addition, multiplication, etc) are
-represented as keywords.
-"
+problem, parses the solution. The nesting of the data structures themselves
+represent parenthesis. Supported operations (addition, multiplication, division,
+subtraction, and negation) are represented as keywords.
 
 (def negation
   {:applicable? (fn [item-1 item-2 item-3]
