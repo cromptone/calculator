@@ -51,11 +51,13 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
     (reduce f coll)))
 
 (defn reduce-unnested [subproblem]
-  (->> subproblem
-       (reduce' (partial reduce-by-threes [negation]))
-       (reduce' (partial reduce-by-threes [multiplication division]))
-       (reduce' (partial reduce-by-threes [addition subtraction]))
-       first))
+  "Reduces unnested problem collection to a single number"
+  (let [subproblem (map #(if (number? %) (bigdec %) %) subproblem)]
+    (->> subproblem
+         (reduce' (partial reduce-by-threes [negation]))
+         (reduce' (partial reduce-by-threes [multiplication division]))
+         (reduce' (partial reduce-by-threes [addition subtraction]))
+         first))) ; TODO: throw error if not reduced to single-item coll
 
 (defn evaluate [node]
   (if (coll? node)
