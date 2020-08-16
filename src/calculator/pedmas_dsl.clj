@@ -54,7 +54,7 @@ Sample input: [:subt 2 :mult 1.003 [3 :div 4 :subt 20.2] add 0 :subt :subt 2)]
     (reduce f coll)))
 
 (defn reduce-unnested [subproblem]
-  "Reduces unnested problem collection to a single number"
+  "Reduces unnested problem collection to single number"
   (let [subproblem (map #(if (number? %) (bigdec %) %) subproblem)]
     (->> subproblem
          (reduce' (partial reduce-by-threes [negation]))
