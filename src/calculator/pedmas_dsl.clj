@@ -7,7 +7,7 @@ problem, parses the solution. The nesting of the data structures themselves
 represent parenthesis. Supported operations (addition, multiplication, division,
 subtraction, and negation) are represented as keywords.
 
-Note that :subt represents both negation and subtraction.
+Note that :subt represents negation and subtraction. Exponents not implemented.
 
 Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
 "
@@ -15,8 +15,8 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
 (defn precision [f]
   #(with-precision 100 (apply f %&)))
 
-(defn arithmetic [operator-kw f]
-  "Constructs reduction helper where a [num op num] sub-coll reduces to a num"
+(defn operator-non [operator-kw f]
+  "Constructs reduction helper where a num-op-num sub-coll reduces to a num"
   {:applicable? (fn [item-1 item-2 item-3]
                   (boolean (and (number? item-1)
                                 (= operator-kw item-2)
@@ -24,10 +24,10 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
    :apply (fn [item-1 _ item-3 coll]
             (concat (drop-last 2 coll) [((precision f) item-1 item-3)]))})
 
-(def addition (arithmetic :add +))
-(def subtraction (arithmetic :subt -))
-(def division (arithmetic :div /))
-(def multiplication (arithmetic :mult *))
+(def addition (operator-non :add +))
+(def subtraction (operator-non :subt -))
+(def division (operator-non :div /))
+(def multiplication (operator-non :mult *))
 (def negation {:applicable? (fn [item-1 item-2 item-3]
                               (boolean (and (not (number? item-1))
                                             (= :subt item-2)
@@ -40,7 +40,9 @@ Sample input: [:subt 2 :add 3 [3 :div 4 :add 4 :subt 20.2] add 8 :subt :subt 2)]
         item-1 (last (butlast coll))
         item-2 (last coll)
         item-3 input]
-    (if-let [operator (first (filter #((:applicable? %) item-1 item-2 item-3) operators))]
+    (if-let [operator (->> operators
+                           (filter #((:applicable? %) item-1 item-2 item-3))
+                           first)]
       ((:apply operator) item-1 item-2 item-3 coll)
       (concat coll [input]))))
 
