@@ -28,7 +28,7 @@
 (defroutes handler
            (GET "/calculus" [query]
                 {:status 200
-                 :headers {"Content-Type" "text/plain"}
+                 :headers {"Content-Type" "application/json"}
                  :body {:result (-> query clean-query reduce-nested)
                         :error false}})
            (ANY "*" [] {:status 500
