@@ -38,5 +38,5 @@
   (-> handler wrap-json-response (wrap-defaults site-defaults)))
 
 (defn -main [& [port]]
-  (let [port (Integer. (or port 3000))]
+  (let [port (Integer. (or port (env :port) 3000))]
     (jetty/run-jetty app {:port port :join? false})))

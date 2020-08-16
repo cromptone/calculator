@@ -6,6 +6,7 @@
                            [compojure "1.6.0"]
                            [ring/ring-json "0.5.0"]
                            [instaparse "1.4.10"]
+                           [environ "1.1.0"]
                            [nrepl "0.8.0"]
                            [clojure-complete "0.2.4"]
                            [ring/ring-defaults "0.3.2"]
@@ -17,4 +18,7 @@
             :min-lein-version "2.0.0"
             :uberjar-name "calculator-standalone.jar"
             :main calculator.web
+            :aot [calculator.web]
+            :plugins [[environ/environ.lein "0.3.1"]]
+            :hooks [environ.leiningen.hooks]
             :profiles {:production {:env {:production true}}})
