@@ -34,9 +34,9 @@
                         :body {:message "Invalid query format"
                                :error true}}))
 
+(def app
+  (-> handler wrap-json-response (wrap-defaults site-defaults)))
+
 (defn -main [& [port]]
   (let [port (Integer. (or port 3000))]
-    (jetty/run-jetty (-> handler
-                         wrap-json-response
-                         (wrap-defaults site-defaults))
-                     {:port port :join? false})))
+    (jetty/run-jetty app {:port port :join? false})))
