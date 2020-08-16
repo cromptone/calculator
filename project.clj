@@ -12,6 +12,7 @@
                            [ring/ring-mock "0.4.0"]
                            [cheshire "5.10.0"]
                            [ring/ring-jetty-adapter "1.7.1"]
+                           [org.clojure/math.numeric-tower "0.0.4"]
                            [org.clojure/test.check "1.1.0"]]
             :min-lein-version "2.0.0"
             :uberjar-name "calculator-standalone.jar"
