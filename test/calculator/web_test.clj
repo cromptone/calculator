@@ -4,8 +4,6 @@
             [cheshire.core :as cheshire]
             [ring.mock.request :as mock]))
 
-(deftest failing-test
-  (is false true))
 (deftest equations-test
   (let [response (app (mock/request :get  "/calculus?query=KDQgKyA0IC0gMjAwIC8gMik="))
         body (-> response :body parse-json)
