@@ -29,6 +29,14 @@
    {:equation "[3 + [2 + (1 +3)+3]]" :result 12 :testing-str "with [] and ()"}
    {:equation "(((1 + 2 - (2 + 3))))" :result -2 :testing-str "with multiple outer parens"}])
 
+(def sample-bad-data
+  [{:equation "- (-2 * -2)* 10 / 0 " :testing-str "with zero division"}
+   {:equation "- (-2 * -2)* * 10 / 2 " :testing-str "with bad syntax"}
+   {:equation "- (-2 * -2)* a 10 / 2 " :testing-str "with invalid letter"}
+   {:equation "- (-2 * -2)* 10 / 2 3" :testing-str "with missing operator"}
+   {:equation "- (-2 * -2)* [10/2]+[3" :testing-str "with invalid brackets"}
+   {:equation "- (-2 * -2)+ (* 10 / 2 3" :testing-str "with invalid parens"}])
+
 (defn GET-test [{:keys [equation result testing-str]}]
   (testing testing-str
     (let [endpoint (str "/calculus?query=" (encode-64 equation))
@@ -37,7 +45,19 @@
           content-type (get (:headers response) "Content-Type")]
       (is (= (:status response) 200))
       (is (= content-type "application/json"))
+      (is (false? (:error body)))
       (is (approx= (:result body) result)))))
+
+(defn GET-test-fail [{:keys [equation testing-str]}]
+  (testing testing-str
+    (let [endpoint (str "/calculus?query=" (encode-64 equation))
+          response (app (mock/request :get  endpoint))
+          body (-> response :body parse-json)
+          content-type (get (:headers response) "Content-Type")]
+      (prn (:message body))
+      (is (= (:status response) 500))
+      (is (true? (:error body)))
+      (is (= content-type "application/json")))))
 
 (deftest equations-test
   (testing "GET request works"
@@ -48,11 +68,15 @@
             content-type (get (:headers response) "Content-Type")]
         (is (= (:status response) 200))
         (is (= content-type "application/json"))
-        (is (approx= (:result body) -92))))
-    (testing "with bad queries"
-      (let [response (app (mock/request :get  "/bad?query=KDQgKyA0IC0gMjAwIC8gMik="))
-            body (-> response :body parse-json)
-            content-type (get (:headers response) "Content-Type")]
-        (is (= (:status response) 400))
-        (is (= content-type "application/json"))
-        (is (= (:error body) true))))))
+        (is (approx= (:result body) -92))))))
+
+(deftest error-test
+  (testing "GET request returns 500"
+    (apply #(testing %&) (map GET-test-fail sample-bad-data)))
+  (testing "GET request returns 400 with bad queries"
+    (let [response (app (mock/request :get  "/bad-format"))
+          body (-> response :body parse-json)
+          content-type (get (:headers response) "Content-Type")]
+      (is (= (:status response) 400))
+      (is (= content-type "application/json"))
+      (is (= (:error body) true)))))
