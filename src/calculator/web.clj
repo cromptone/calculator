@@ -8,7 +8,7 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [calculator.utils :as utils]
             [calculator.pedmas-dsl :refer [reduce-nested]]
-            [calculator.exceptions :refer [error check-decoded-query]])
+            [calculator.exceptions :refer [ex error check-decoded-query]])
   (:gen-class))
 
 (def ops {"/" :div
@@ -17,14 +17,16 @@
           "-" :subt})
 
 (defn clean-query [encoded-query]
-  (-> encoded-query
-      (utils/decode-64)
-      (check-decoded-query)
-      (#(str "[" % "]"))
-      (clojure.string/replace #"[*/+-]" #(str " " (get ops %) " "))
-      (clojure.string/replace #"\(|\)" {"(" "[" ")" "]"})
-      (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. .5 with 0.5
-      edn/read-string))
+  (if (nil? encoded-query)
+    (ex "Query must have a value provided")
+    (-> encoded-query
+        (utils/decode-64)
+        (check-decoded-query)
+        (#(str "[" % "]"))
+        (clojure.string/replace #"[*/+-]" #(str " " (get ops %) " "))
+        (clojure.string/replace #"\(|\)" {"(" "[" ")" "]"})
+        (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. .5 with 0.5
+        edn/read-string)))
 
 (defroutes handler
            (GET "/calculus" [query]
