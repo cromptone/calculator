@@ -9,7 +9,7 @@
 (defn ex [explanation] (throw (Exception. explanation)))
 
 (defn check-decoded-query [query]
-  (let [invalid-chars (clojure.string/replace query #"[0-9\s\*\+\-\/\(\)\.]" "")
+  (let [invalid-chars (clojure.string/replace query #"[0-9\s\*\+\-\/\(\)\.\^]" "")
         freq (frequencies query)]
     (cond
       (clojure.string/blank? query) (ex "Query value is blank")

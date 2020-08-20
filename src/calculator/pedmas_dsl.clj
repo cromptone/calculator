@@ -1,5 +1,6 @@
 (ns calculator.pedmas-dsl
   (:require [clojure.walk :refer [postwalk]]
+            [clojure.math.numeric-tower :as math]
             [calculator.exceptions :refer [check-reduced-problem]]))
 "
 Given a nested collection (vectors or lists) mimicking a PDMAS arithmetic
@@ -27,6 +28,7 @@ Sample input: [:subt 2 :mult 1.003 [3 :div 4 :subt 20.2] add 0 :subt :subt 2)]
 (def addition (operator-non :add +))
 (def subtraction (operator-non :subt -))
 (def division (operator-non :div /))
+(def exponent (operator-non :exp math/expt))
 (def multiplication (operator-non :mult *))
 (def negation {:applicable? (fn [item-1 item-2 item-3]
                               (boolean (and (not (number? item-1))
@@ -57,6 +59,9 @@ Sample input: [:subt 2 :mult 1.003 [3 :div 4 :subt 20.2] add 0 :subt :subt 2)]
   "Reduces unnested problem collection to single number"
   (let [subproblem (map #(if (number? %) (bigdec %) %) subproblem)]
     (->> subproblem
+         reverse
+         (reduce' (partial reduce-by-threes [exponent]))
+         reverse
          (reduce' (partial reduce-by-threes [negation]))
          (reduce' (partial reduce-by-threes [multiplication division]))
          (reduce' (partial reduce-by-threes [addition subtraction]))

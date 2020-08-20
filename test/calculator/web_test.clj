@@ -25,6 +25,9 @@
    {:equation "-       2 + 3 --4 *  8 -(4)  " :result 29 :testing-str "with odd whitespace"}
    {:equation "-3" :result -3 :testing-str "with single negative number"}
    {:equation "1" :result 1 :testing-str "with single number"}
+   {:equation "2^4" :result 16 :testing-str "with exponent"}
+   {:equation "-2^(4 + 3 * 0 )" :result -16 :testing-str "with a negation applied after exponent"}
+   {:equation "2^2^3 + 1" :result 257 :testing-str "with stacked exponents"}
    {:equation "(((1 + 2 - (2 + 3))))" :result -2 :testing-str "with multiple outer parens"}])
 
 (def sample-bad-data

@@ -13,6 +13,7 @@
 
 (def ops {"/" :div
           "*" :mult
+          "^" :exp
           "+" :add
           "-" :subt})
 
@@ -23,7 +24,7 @@
         (utils/decode-64)
         (check-decoded-query)
         (#(str "[" % "]"))
-        (clojure.string/replace #"[*/+-]" #(str " " (get ops %) " "))
+        (clojure.string/replace #"[\^*/+-]" #(str " " (get ops %) " "))
         (clojure.string/replace #"\(|\)" {"(" "[" ")" "]"})
         (clojure.string/replace #"(?<![0-9])\." "0.") ;replace e.g. .5 with 0.5
         edn/read-string)))
